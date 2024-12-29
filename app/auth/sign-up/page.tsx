@@ -1,15 +1,15 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { useState } from "react"
+// import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import Link from "next/link"
 
  
 const Signup = () => {
-  const [userName, setUserName] = useState("")
-  const [userEmail, setUserEmail] = useState("")
-  const [userPassword, setUserPassword] = useState("")
+  // const [userName, setUserName] = useState("")
+  // const [userEmail, setUserEmail] = useState("")
+  // const [userPassword, setUserPassword] = useState("")
  
   
   return (
