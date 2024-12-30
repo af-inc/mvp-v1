@@ -4,12 +4,18 @@ import React, { useState } from "react";
 import Link from "next/link";
 import TipTap from "@/components/TipTap";
 
+interface FormData {
+  campaignName: string;
+  description: string;
+  budget: number;
+  image?: File;  
+}
+
 const CreateCampaigns: React.FC = () => {
   const [formData, setFormData] = useState({
     campaignName: "",
     description: "",
     budget: 0,
-    image: null,
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,22 +27,30 @@ const CreateCampaigns: React.FC = () => {
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData({
-        ...formData,
-        image: e.target.files[0],
-      });
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      setFormData((prev) => ({
+        ...prev,
+        image: files[0],
+      }));
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Campaign Created:", formData);
+    if (isFormComplete()) {
+      console.log("Campaign Created:", formData);
+    }
   };
 
-  const isFormComplete = () =>
-    formData.campaignName && formData.description && formData.budget > 0 && formData.image;
-
+  const isFormComplete = (): boolean => {
+    return Boolean(
+      formData.campaignName &&
+      formData.description &&
+      formData.budget > 0 &&
+      formData.image
+    );
+  };
   return (
     <div className="h-screen w-screen bg-gray-100 overflow-auto">
       <div className="flex flex-col items-center p-6">
