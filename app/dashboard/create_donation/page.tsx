@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState} from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import TipTap from "@/components/TipTap";
 
@@ -8,31 +8,31 @@ interface FormData {
   campaignName: string;
   description: string;
   budget: number;
-  image?: File;  
+  image?: File; // Use undefined for optional types
 }
 
 const CreateCampaigns: React.FC = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     campaignName: "",
     description: "",
     budget: 0,
+    image: undefined, // Initialize as undefined if null isn't suitable
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === 'budget' ? Number(value) : value,
+      [name]: name === "budget" ? Number(value) : value,
     }));
   };
-
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files && files.length > 0) {
       setFormData((prev) => ({
         ...prev,
-        image: files[0],
+        image: files[0], // Safely handle file selection
       }));
     }
   };
@@ -41,6 +41,8 @@ const CreateCampaigns: React.FC = () => {
     e.preventDefault();
     if (isFormComplete()) {
       console.log("Campaign Created:", formData);
+    } else {
+      console.error("Form is incomplete");
     }
   };
 
@@ -49,7 +51,7 @@ const CreateCampaigns: React.FC = () => {
       formData.campaignName &&
       formData.description &&
       formData.budget > 0 &&
-      formData.image
+      formData.image // Ensure image is set
     );
   };
 
