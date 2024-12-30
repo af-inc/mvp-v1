@@ -9,7 +9,7 @@ interface FormData {
   campaignName: string;
   description: string;
   budget: number;
-  image: File | null;
+  image: File;
 }
 
 const CreateCampaigns: React.FC = () => {
