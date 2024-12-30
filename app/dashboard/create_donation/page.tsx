@@ -4,38 +4,56 @@ import React, { useState } from "react";
 import Link from "next/link";
 import TipTap from "@/components/TipTap";
 
+interface FormData {
+  campaignName: string;
+  description: string;
+  budget: number;
+  image?: File; // Use undefined for optional types
+}
+
 const CreateCampaigns: React.FC = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     campaignName: "",
     description: "",
     budget: 0,
-    image: null,
+    image: undefined, // Initialize as undefined if null isn't suitable
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === "budget" ? Number(value) : value,
+    }));
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData({
-        ...formData,
-        image: e.target.files[0],
-      });
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      setFormData((prev) => ({
+        ...prev,
+        image: files[0], // Safely handle file selection
+      }));
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Campaign Created:", formData);
+    if (isFormComplete()) {
+      console.log("Campaign Created:", formData);
+    } else {
+      console.error("Form is incomplete");
+    }
   };
 
-  const isFormComplete = () =>
-    formData.campaignName && formData.description && formData.budget > 0 && formData.image;
+  const isFormComplete = (): boolean => {
+    return Boolean(
+      formData.campaignName &&
+      formData.description &&
+      formData.budget > 0 &&
+      formData.image // Ensure image is set
+    );
+  };
 
   return (
     <div className="h-screen w-screen bg-gray-100 overflow-auto">
