@@ -3,82 +3,76 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import TipTap from "@/components/TipTap";
-import './CreateCampaigns.css'; // Import CSS for transition effects
+import './CreateCampaigns.css';
 
 interface FormData {
   campaignName: string;
   description: string;
   budget: number;
-  image: File | null;
+  image?: File;  
 }
 
 const CreateCampaigns: React.FC = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     campaignName: "",
     description: "",
     budget: 0,
-    image: null,
   });
 
   const [currentStep, setCurrentStep] = useState(0);
   const [transitionState, setTransitionState] = useState('enter');
 
-  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const { name, value } = e.target;
-  //   setFormData({
-  //     ...formData,
-  //     [name]: value,
-  //   });
-  // };
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === 'budget' ? Number(value) : value,
     }));
   };
-  // const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (e.target.files && e.target.files[0]) {
-  //     setFormData({
-  //       ...formData,
-  //       image: e.target.files[0],
-  //     });
-  //   }
-  // };
-const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
-    setFormData((prev) => ({
-      ...prev,
-      image: file,
-    }));
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      setFormData((prev) => ({
+        ...prev,
+        image: files[0],
+      }));
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Campaign Created:", formData);
+    if (isFormComplete()) {
+      console.log("Campaign Created:", formData);
+    }
   };
 
-  const isFormComplete = () =>
-    formData.campaignName && formData.description && formData.budget > 0 && formData.image !== null;
+  const isFormComplete = (): boolean => {
+    return Boolean(
+      formData.campaignName &&
+      formData.description &&
+      formData.budget > 0 &&
+      formData.image
+    );
+  };
 
-  // Handlers for navigation between steps
   const handleNext = () => {
     if (currentStep < 3) {
-      setTransitionState('exit'); // Set to exit before changing the step
+      setTransitionState('exit');
       setTimeout(() => {
         setCurrentStep(currentStep + 1);
         setTransitionState('enter');
-      }, 500); // Allow time for the transition
+      }, 500);
     }
   };
 
   const handlePrevious = () => {
     if (currentStep > 0) {
-      setTransitionState('exit'); // Set to exit before changing the step
+      setTransitionState('exit');
       setTimeout(() => {
         setCurrentStep(currentStep - 1);
         setTransitionState('enter');
-      }, 500); // Allow time for the transition
+      }, 500);
     }
   };
 
@@ -130,6 +124,8 @@ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
                     onChange={handleInputChange}
                     className="flex-1 block w-full px-4 py-2 border border-gray-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     placeholder="Enter budget"
+                    min="0"
+                    step="0.01"
                   />
                 </div>
               </>
@@ -172,7 +168,9 @@ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
                   Upload Image
                 </label>
                 {formData.image && (
-                  <p className="mt-2 text-sm text-green-600">Image selected: {formData.image.name}</p>
+                  <p className="mt-2 text-sm text-green-600">
+                    Image selected: {formData.image.name}
+                  </p>
                 )}
               </>
             )}
@@ -200,7 +198,8 @@ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
             ) : (
               <button
                 type="submit"
-                className="py-3 px-6 bg-purple-800 text-white font-bold rounded-md hover:bg-purple-900 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                disabled={!isFormComplete()}
+                className="py-3 px-6 bg-purple-800 text-white font-bold rounded-md hover:bg-purple-900 focus:outline-none focus:ring-2 focus:ring-purple-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 Create Campaign
               </button>
@@ -208,7 +207,6 @@ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
           </div>
         </form>
 
-        {/* Back Link */}
         <div className="mt-4 text-center">
           <Link href="/campaigns" className="text-blue-600 hover:underline">
             Back to Campaigns
