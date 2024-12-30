@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useState} from "react";
 import Link from "next/link";
 import TipTap from "@/components/TipTap";
 
@@ -18,13 +18,14 @@ const CreateCampaigns: React.FC = () => {
     budget: 0,
   });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setFormData((prev) => ({
+      ...prev,
+      [name]: name === 'budget' ? Number(value) : value,
+    }));
   };
+
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -51,6 +52,7 @@ const CreateCampaigns: React.FC = () => {
       formData.image
     );
   };
+
   return (
     <div className="h-screen w-screen bg-gray-100 overflow-auto">
       <div className="flex flex-col items-center p-6">
