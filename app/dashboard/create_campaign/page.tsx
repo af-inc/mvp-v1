@@ -5,6 +5,13 @@ import Link from "next/link";
 import TipTap from "@/components/TipTap";
 import './CreateCampaigns.css'; // Import CSS for transition effects
 
+interface FormData {
+  campaignName: string;
+  description: string;
+  budget: number;
+  image: File | null;
+}
+
 const CreateCampaigns: React.FC = () => {
   const [formData, setFormData] = useState({
     campaignName: "",
@@ -16,21 +23,34 @@ const CreateCampaigns: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [transitionState, setTransitionState] = useState('enter');
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const { name, value } = e.target;
+  //   setFormData({
+  //     ...formData,
+  //     [name]: value,
+  //   });
+  // };
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
-    });
+    }));
   };
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData({
-        ...formData,
-        image: e.target.files[0],
-      });
-    }
+  // const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (e.target.files && e.target.files[0]) {
+  //     setFormData({
+  //       ...formData,
+  //       image: e.target.files[0],
+  //     });
+  //   }
+  // };
+const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setFormData((prev) => ({
+      ...prev,
+      image: file,
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
