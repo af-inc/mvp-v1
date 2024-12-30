@@ -21,7 +21,7 @@ const MyCampaigns: React.FC = () => {
           </div>
         </header>
 
-        {campaigns.length === 0 ? (
+        {campaigns.length <= 0 ? (
           <div className="flex flex-col justify-center items-center h-[50vh]">
             <h3 className="text-2xl font-semibold">No campaigns yet</h3>
             <p className="text-gray-400 mt-2">Start your first campaign to make an impact!</p>
