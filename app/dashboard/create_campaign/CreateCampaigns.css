@@ -1,0 +1,23 @@
+/* CreateCampaigns.css */
+
+.step-container {
+  transition: opacity 500ms ease-out, transform 500ms ease-out;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.step-container.enter {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.step-container.exit {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Optional: Fade-out effect for previous steps */
+.step-container.exit-active {
+  opacity: 0;
+  transform: translateY(20px);
+}
