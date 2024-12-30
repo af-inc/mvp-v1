@@ -6,7 +6,7 @@ import Link from "next/link";
 const Donations: React.FC = () => {
   const [campaigns, setCampaigns] = useState([
     // Example campaigns data
-    { id: 1, name: "Save the Earth", status: "Active", raised: "$5,000", goal: "$10,000" },
+    // { id: 1, name: "Save the Earth", status: "Active", raised: "$5,000", goal: "$10,000" },
   ]);
 
   return (
@@ -20,7 +20,7 @@ const Donations: React.FC = () => {
           </div>
         </header>
 
-        {campaigns.length === 0 ? (
+        {campaigns.length <= 0 ? (
           <div className="flex flex-col justify-center items-center h-[50vh]">
             <h3 className="text-2xl font-semibold">No donations yet</h3>
             <p className="text-gray-400 mt-2">Create your first donation page to make an impact!</p>
