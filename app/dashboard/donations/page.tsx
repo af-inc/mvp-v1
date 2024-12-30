@@ -6,7 +6,7 @@ import Link from "next/link";
 const Donations: React.FC = () => {
   const [campaigns, setCampaigns] = useState([
     // Example campaigns data
-    // { id: 1, name: "Save the Earth", status: "Active", raised: "$5,000", goal: "$10,000" },
+    { id: 1, name: "Save the Earth", status: "Active", raised: "$5,000", goal: "$10,000" },
   ]);
 
   return (
