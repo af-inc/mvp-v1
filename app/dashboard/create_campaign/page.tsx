@@ -9,7 +9,7 @@ interface FormData {
   campaignName: string;
   description: string;
   budget: number;
-  image: File;
+  image: File | null;
 }
 
 const CreateCampaigns: React.FC = () => {
@@ -59,7 +59,7 @@ const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
   };
 
   const isFormComplete = () =>
-    formData.campaignName && formData.description && formData.budget > 0 && formData.image;
+    formData.campaignName && formData.description && formData.budget > 0 && formData.image !== null;
 
   // Handlers for navigation between steps
   const handleNext = () => {
